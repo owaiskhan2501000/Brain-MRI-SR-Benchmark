@@ -1,0 +1,8 @@
+{
+ "GT (HR)": 0.9475,
+ "Bicubic": 0.8525,
+ "EDSR": 0.935,
+ "Waifu2x": 0.93,
+ "RealESRGAN": 0.9025,
+ "SwinIR": 0.94
+}
