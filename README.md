@@ -35,4 +35,4 @@ The entire pipeline is divided into sequential steps provided in the Jupyter/Col
 ## 📝 Citation
 If you use this code or benchmark, please cite our paper:
 ```text
-[Add your paper citation here once published]
+Mohammad Owais and Muhammad Owais, “Benchmarking Off-the-Shelf Deep Learning Super-Resolution Models on Public Brain Tumour MRI: A CNN-versus-Transformer Comparison Without Fine-Tuning,” Manuscript under review, 2026.
