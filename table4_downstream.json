@@ -1,8 +1,28 @@
 {
- "GT (HR)": 0.9475,
- "Bicubic": 0.8525,
- "EDSR": 0.935,
- "Waifu2x": 0.93,
- "RealESRGAN": 0.9025,
- "SwinIR": 0.94
+  "description": "Five-seed downstream accuracy (%) = manuscript Table 6 (seeds 42-46); replaces the single-split values in the repository.",
+  "seeds": [42, 43, 44, 45, 46],
+  "per_seed": {
+    "HR": [94.75, 92.75, 91.25, 92.0, 95.5],
+    "Bicubic": [86.75, 82.0, 87.75, 78.5, 84.75],
+    "EDSR": [90.75, 89.0, 90.25, 84.0, 90.75],
+    "Waifu2x": [88.0, 87.25, 89.0, 83.5, 90.25],
+    "Real-ESRGAN": [81.75, 87.75, 89.0, 87.0, 88.0],
+    "SwinIR": [91.5, 89.5, 90.5, 85.75, 90.75]
+  },
+  "mean": {
+    "HR": 93.25,
+    "Bicubic": 83.95,
+    "EDSR": 88.95,
+    "Waifu2x": 87.6,
+    "Real-ESRGAN": 86.7,
+    "SwinIR": 89.6
+  },
+  "sd": {
+    "HR": 1.81,
+    "Bicubic": 3.76,
+    "EDSR": 2.86,
+    "Waifu2x": 2.55,
+    "Real-ESRGAN": 2.86,
+    "SwinIR": 2.27
+  }
 }
