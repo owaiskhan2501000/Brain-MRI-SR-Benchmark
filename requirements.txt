@@ -1,0 +1,21 @@
+# Python 3.13 / Google Colab, NVIDIA Tesla T4 (versions as used for the paper; CUDA 12.8)
+torch==2.11
+torchvision
+numpy
+pandas
+scipy
+scikit-image
+scikit-learn
+pillow
+opencv-python
+matplotlib
+lpips
+imagehash==4.3.2
+timm
+super-image          # EDSR (edsr-base x4) weights
+basicsr              # Real-ESRGAN dependency
+realesrgan           # Real-ESRGAN (cloned from https://github.com/xinntao/Real-ESRGAN in the notebook)
+# Cloned in-notebook (no pip package):
+#   https://github.com/nagadomi/nunif          (Waifu2x UpConv-7 photo)
+#   https://github.com/JingyunLiang/SwinIR     (001_classicalSR_DIV2K_s48w8_SwinIR-M_x4)
+#   https://github.com/xinntao/ESRGAN          (ESRGAN_SRx4_DF2KOST_official control)

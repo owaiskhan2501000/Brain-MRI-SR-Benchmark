@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this code, the manifest, or the benchmark results, please cite the paper below."
+title: "Brain-MRI-SR-Benchmark: Benchmarking Off-the-Shelf Deep Learning Super-Resolution Models on Public Brain Tumor MRI"
+type: software
+authors:
+  - family-names: Owais
+    given-names: Mohammad
+    email: owaiskhan2501000@gmail.com
+    affiliation: "Department of Computer Science, Abbottabad University of Science and Technology, Abbottabad, Pakistan"
+  - family-names: Owais
+    given-names: Muhammad
+    affiliation: "Faculty of Systems Design, Tokyo Metropolitan University, Tokyo, Japan"
+repository-code: "https://github.com/owaiskhan2501000/Brain-MRI-SR-Benchmark"
+license: MIT
+version: 1.0.0
+date-released: 2026-10-18
+preferred-citation:
+  type: unpublished
+  title: "Benchmarking Off-the-Shelf Deep Learning Super-Resolution Models on Public Brain Tumor MRI: A CNN-versus-Transformer Comparison Without Fine-Tuning"
+  authors:
+    - family-names: Owais
+      given-names: Mohammad
+    - family-names: Owais
+      given-names: Muhammad
+  year: 2026
+  notes: "Manuscript under review, Visual Computing for Industry, Biomedicine, and Art"
+  url: "https://github.com/owaiskhan2501000/Brain-MRI-SR-Benchmark"

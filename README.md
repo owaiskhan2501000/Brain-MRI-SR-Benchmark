@@ -2,23 +2,22 @@
 
 ### A CNN-versus-Transformer Comparison Without Fine-Tuning
 
-[Python 3.13](https://www.google.com/search?q=https%3A%2F%2Fwww.python.org%2F)
-[PyTorch 2.11](https://www.google.com/search?q=https%3A%2F%2Fpytorch.org%2F)
-[Colab](https://www.google.com/search?q=https%3A%2F%2Fcolab.research.google.com%2F)
-[License: MIT](https://www.google.com/search?q=https%3A%2F%2Fopensource.org%2Flicenses%2FMIT)
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-blue.svg)](https://www.python.org/)
+[![PyTorch 2.11](https://img.shields.io/badge/PyTorch-2.11-ee4c2c.svg)](https://pytorch.org/)
+[![Colab](https://img.shields.io/badge/Google-Colab-F9AB00.svg)](https://colab.research.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+This repository contains the official code, evaluation protocol, data manifest, per-image results, result tables, and figures for the paper:
 
-This repository contains the official code, evaluation protocol, data manifest, and per-image results for the paper:
-
-> **Mohammad Owais&lt;sup&gt;1,\*&lt;/sup&gt; and Muhammad Owais&lt;sup&gt;2&lt;/sup&gt;**, *"Benchmarking Off-the-Shelf Deep Learning Super-Resolution Models on Public Brain Tumor MRI: A CNN-versus-Transformer Comparison Without Fine-Tuning,"* manuscript under review, 2026.
+> **Mohammad Owais<sup>1,\*</sup> and Muhammad Owais<sup>2</sup>**, *"Benchmarking Off-the-Shelf Deep Learning Super-Resolution Models on Public Brain Tumor MRI: A CNN-versus-Transformer Comparison Without Fine-Tuning,"* manuscript under review at *Visual Computing for Industry, Biomedicine, and Art*, 2026.
 >
-> &lt;sup&gt;1&lt;/sup&gt; Department of Computer Science, Abbottabad University of Science and Technology, Abbottabad, Pakistan
-> &lt;sup&gt;2&lt;/sup&gt; Faculty of Systems Design, Tokyo Metropolitan University, Tokyo, Japan
-> &lt;sup&gt;\*&lt;/sup&gt; Corresponding author: owaiskhan2501000@gmail.com
+> <sup>1</sup> Department of Computer Science, Abbottabad University of Science and Technology, Abbottabad, Pakistan
+> <sup>2</sup> Faculty of Systems Design, Tokyo Metropolitan University, Tokyo, Japan
+> <sup>\*</sup> Corresponding author: owaiskhan2501000@gmail.com
 
 ---
 
-## 📌 Overview
+## Overview
 
 Pretrained single-image super-resolution (SISR) networks built for natural photographs are now routinely applied to medical scans **without any retraining**. Whether this is a sound practice for brain magnetic resonance imaging (MRI) had not been tested under a controlled, repeatable protocol.
 
@@ -41,11 +40,11 @@ This repository provides a **fully reproducible benchmark of five off-the-shelf 
 
 ### Key message
 
-> **Training objective matters far more than architecture.** Pixel-loss CNNs and Transformers transfer to brain MRI without fine-tuning and recover 39–61% of the class-relevant classification accuracy lost to downsampling. The perception-oriented GAN (Real-ESRGAN) trades fidelity for plausible-looking texture, fabricates high-frequency structure along tissue boundaries, and delivers an erratic downstream benefit. **Perceptual metrics alone can hide task-relevant fidelity loss** — MRI SR studies should report anatomy-restricted distortion metrics alongside perceptual ones.
+> **Training objective matters far more than architecture.** Pixel-loss CNNs and Transformers transfer to brain MRI without fine-tuning and recover 39–61% of the classification accuracy lost to downsampling. The perception-oriented GAN (Real-ESRGAN) trades fidelity for plausible-looking texture, fabricates high-frequency structure along tissue boundaries, and delivers an erratic downstream benefit. **Perceptual metrics alone can hide task-relevant fidelity loss** — MRI SR studies should report head-mask-restricted distortion metrics alongside perceptual ones.
 
 ---
 
-## 🧩 Contributions
+## Contributions
 
 1. **Reproducible benchmark** of five off-the-shelf 4× SISR methods on 2000 public brain tumor MRI slices across four diagnostic classes, with the exact slice list, LR/HR generation script, and evaluation code released.
 2. **Head-mask-restricted evaluation protocol** (PSNR and SSIM inside a foreground head mask; full-frame LPIPS), reported per class, with paired Wilcoxon signed-rank tests, bootstrap 95% CIs, and Bonferroni correction.
@@ -55,43 +54,63 @@ This repository provides a **fully reproducible benchmark of five off-the-shelf 
 
 ---
 
-## 📂 Repository Structure
+## Repository structure
+
+File and table/figure numbers follow the manuscript.
 
 ```
 Brain-MRI-SR-Benchmark/
-├── SR_Master_Pipeline.ipynb      # Complete end-to-end pipeline (Steps 0–9, see below)
-├── manifest.json                 # Exact list of the 2000 slices (500/class), dimensions & class labels
-├── per_image_metrics.csv         # Per-image head-mask PSNR/SSIM, full-frame PSNR/SSIM, LPIPS
-│                                 #   for all 5 methods × 2000 slices (10000 rows)
-├── table1_overall.csv            # Table 1 – overall mean ± SD (head-mask + full-frame)
-├── table2_paired.csv             # Table 2 – paired Δ vs bicubic, 95% bootstrap CI, Wilcoxon p
-├── table3_perclass.csv           # Table 3 – per-class means (glioma / meningioma / no tumor / pituitary)
-├── table4_downstream.json        # Tables 5–6 – ResNet-18 accuracy per seed (42–46) and mean ± SD
+├── SR_Master_Pipeline.ipynb               # Complete end-to-end pipeline (Steps 0–9, see "How to reproduce")
+├── manifest.json                          # Exact list of the 2000 slices: id, class, source file, HR height/width
+├── per_image_metrics.csv                  # Per-image head-mask PSNR/SSIM, full-frame PSNR/SSIM, LPIPS, background
+│                                          #   fraction for all 5 methods × 2000 slices (10000 rows)
+├── tables/
+│   ├── table1_overall.csv                 # Paper Table 1 – overall mean ± SD (head-mask + full-frame)
+│   ├── table2_paired_stats.csv            # Paper Table 2 – paired Δ vs bicubic, 95% bootstrap CI, Wilcoxon p
+│   ├── table3_per_class.csv               # Paper Table 3 – per-class means (glioma / meningioma / notumor / pituitary)
+│   ├── table4_esrgan_control.csv          # Paper Table 4 – inset MAE of the bicubic-trained ESRGAN control
+│   └── table5_6_downstream_5seed.json     # Paper Tables 5–6 – ResNet-18 accuracy per seed (42–46), mean ± SD
 ├── figures/
-│   ├── fig1_workflow.png         # Study workflow
-│   ├── fig2_boxplots.png         # Per-slice head-mask PSNR / SSIM / LPIPS distributions
-│   ├── fig3_histogram.png        # Head-mask PSNR histogram
-│   ├── fig4_glioma_detail.png    # Full slice, zoomed inset, and residual heat maps (glioma)
-│   └── fig5_residuals_allclasses.png  # Residual maps for all four classes
-├── LICENSE                       # MIT License for benchmark code and scripts
+│   ├── fig1_workflow.png                  # Paper Fig. 1 – study workflow
+│   ├── fig2_boxplots.png                  # Paper Fig. 2 – per-slice head-mask PSNR / SSIM / LPIPS distributions
+│   ├── fig3_histogram.png                 # Paper Fig. 3 – head-mask PSNR histogram
+│   ├── fig4_glioma_detail.png             # Paper Fig. 4 – full slice, zoomed inset, residual heat maps (glioma)
+│   ├── fig5_residuals_allclasses.png      # Paper Fig. 5 – residual maps for all four classes
+│   └── notebook_raw/                      # Unedited figures as written by the notebook (Figs. 2–5 before relabelling)
+├── scripts/
+│   ├── verify_numbers.py                  # Re-computes every number in the paper from per_image_metrics.csv + manifest.json
+│   ├── make_figs23.py                     # Regenerates figures/fig2_boxplots.png and fig3_histogram.png from per_image_metrics.csv
+│   └── relabel_figs45.py                  # Relabels the raw notebook figures into figures/fig4 and fig5 (text only)
+├── requirements.txt                       # Python packages used (versions as run on Colab)
+├── CITATION.cff                           # Citation metadata
+├── LICENSE                                # MIT License for benchmark code and scripts
 └── README.md
 ```
 
 > **Note:** Super-resolved output images and model weights are *not* stored in this repository because of size. They are regenerated deterministically by the notebook from the public dataset and the public checkpoints listed above.
 
+### Verifying the paper's numbers
+
+```bash
+pip install numpy pandas scipy
+python scripts/verify_numbers.py .
+```
+
+This re-computes Tables 1–3, the SwinIR-versus-EDSR comparison, the win fractions (SwinIR best on 1589 slices, EDSR 409, Waifu2x 2; Real-ESRGAN below bicubic on 93.1%), the background statistics, and the full-frame-minus-mask PSNR gap directly from `per_image_metrics.csv` and `manifest.json`.
+
 ---
 
-## 🗂️ Dataset
+## Dataset
 
-- **Source:** [Brain Tumor MRI Dataset](https://www.google.com/search?q=https%3A%2F%2Fwww.kaggle.com%2Fdatasets%2Fmasoudnickparvar%2Fbrain-tumor-mri-dataset) (Kaggle, [doi:10.34740/KAGGLE/DSV/2645886](https://www.google.com/search?q=https%3A%2F%2Fdoi.org%2F10.34740%2FKAGGLE%2FDSV%2F2645886)) — 7023 JPEG slices aggregated from figshare (Cheng et al.), SARTAJ, and Br35H; axial/coronal/sagittal; four classes.
+- **Source:** [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset) (Kaggle, [doi:10.34740/KAGGLE/DSV/2645886](https://doi.org/10.34740/KAGGLE/DSV/2645886)) — 7023 JPEG slices aggregated from figshare (Cheng et al.), SARTAJ, and Br35H; axial/coronal/sagittal; four classes. Only the figshare portion is documented (T1-weighted, contrast-enhanced).
 - **Benchmark subset:** 500 slices per class drawn at random from the *training* partition (seed = 42) → **n = 2000**. The exact file list is in `manifest.json`.
 - **HR reference:** each slice converted to 8-bit grayscale and **mod-cropped** to the largest multiple of 32 px (so 4× and SwinIR's 8-px window divide exactly, with no padding). Because the source images are JPEG-compressed, the HR references carry native JPEG artifacts and represent the best available reference rather than an artifact-free ground truth. Side lengths range 128–1440 px; 331 slices are non-square; median side 512 px (tumor classes) vs 224 px (no-tumor).
 - **LR input:** 4× **antialiased bicubic** downsampling (Pillow `Image.BICUBIC`), saved as **lossless PNG**. One shared LR set is read by every method.
-- **Duplicate screen:** 64-bit DCT pHash (`imagehash` 4.3.2) flagged **84 / 2000 slices (4.2%)** as exact-hash near-duplicates (42 pairs). Paired fidelity metrics are unaffected because each slice is scored against its own HR reference; in the downstream classifier, an expected ~27 duplicate pairs straddle a random 1600/400 train/test split, a shared upper bound across all input conditions whose exact effect on absolute accuracy was not re-measured and is noted as a study limitation.
+- **Duplicate screen:** 64-bit DCT pHash (`imagehash` 4.3.2) flagged **84 / 2000 slices (4.2%)** as exact-hash near-duplicates. Paired fidelity metrics are unaffected because each slice is scored against its own HR reference; in the downstream classifier, an expected ≈ 27 duplicate pairs straddle a random 1600/400 train/test split, a shared upper bound across all input conditions whose exact effect on absolute accuracy was not re-measured and is noted as a study limitation.
 
 ---
 
-## ⚙️ Evaluation Protocol
+## Evaluation protocol
 
 ### Fidelity metrics (head-mask restricted)
 Background covers 34.3% of pixels on average (0–81%) and is reconstructed near-perfectly by every method, which inflates full-frame scores. All fidelity metrics are therefore computed **inside a head mask** derived from the HR reference:
@@ -117,7 +136,7 @@ Because no skull-stripping is applied, this foreground head mask retains the sku
 For one representative slice per class: zoomed 96×96 inset on the tumor (or corresponding region), absolute residual |SR − GT| heat map on a shared 0–60 gray-level scale, and inset MAE.
 
 ### Downstream classification
-- ImageNet-pretrained **ResNet-18**, 4-class, input resized to 224×224 via bilinear interpolation and normalized to [−1, 1] via (x − 0.5)/0.5, batch 32, AdamW, lr 1e-4, cross-entropy, **3 epochs**, trained on **1600 HR slices only**.
+- ImageNet-pretrained **ResNet-18**, 4-class, input resized to 224×224 via OpenCV bilinear interpolation and normalized to [−1, 1] via (x − 0.5)/0.5, replicated to 3 channels, batch 32, AdamW, lr 1e-4, cross-entropy, **3 epochs**, trained on **1600 HR slices only**.
 - Evaluated on the **400 held-out slices** in HR form and in each of the five SR forms (same test images per split).
 - Repeated for **five stratified random splits (seeds 42–46)**; sample mean ± SD (ddof = 1) reported.
 
@@ -126,40 +145,32 @@ Google Colab, **NVIDIA Tesla T4 (16 GB)**, Python 3.13, PyTorch 2.11, CUDA 12.8.
 
 ---
 
-## 🚀 How to Reproduce
+## How to reproduce
 
-The entire pipeline lives in a single notebook, **`SR_Master_Pipeline.ipynb`**, organized into sequential steps. Open it in Google Colab (GPU runtime) and run top-to-bottom.
+The entire pipeline lives in a single notebook, **`SR_Master_Pipeline.ipynb`**, organized into sequential, headed steps. Open it in Google Colab (GPU runtime) and run top-to-bottom.
 
 | Step | Section | What it does |
 |---|---|---|
-| **0** | Dataset preparation | Download Kaggle dataset, stratified sampling (seed 42), grayscale + mod-crop → HR PNG, 4× antialiased bicubic → LR PNG, write `manifest.json`, run pHash duplicate screen |
+| **0** | Dataset preparation | Load the Kaggle dataset (Drive copy or Kaggle API), stratified sampling (seed 42), grayscale + mod-crop → HR PNG, 4× antialiased bicubic → LR PNG, write `manifest.json` |
+| **0b** | Duplicate screen | 64-bit DCT pHash over the 2000 HR slices (84 flagged) |
 | **1** | Bicubic | Pillow 4× upsampling baseline |
 | **2** | Waifu2x | `nunif` UpConv-7 photo model, denoise off, 2× applied twice in cascade |
-| **3** | EDSR | `edsr-base` 4× DIV2K checkpoint |
-| **4** | Real-ESRGAN | `RealESRGAN_x4plus` checkpoint (RGB in → grayscale out) |
-| **5** | SwinIR | `001_classicalSR_DIV2K_s48w8_SwinIR-M_x4`, window 8 |
-| **5b** | ESRGAN control | `ESRGAN_SRx4_DF2KOST_official` on the four representative qualitative slices |
-| **6** | Quantitative evaluation | Head-mask PSNR/SSIM, full-frame PSNR/SSIM, LPIPS; Wilcoxon tests, bootstrap CIs, Bonferroni; writes `per_image_metrics.csv`, `table1`–`table3` |
-| **7** | Qualitative analysis | Zoomed insets, residual heat maps (|SR − GT|), inset MAE; generates Figs. 4–5 and the ESRGAN control table |
-| **8** | Downstream classification | ResNet-18 trained on 1600 HR / tested on 400 SR slices, five seeds (42–46); writes `table4_downstream.json` |
-| **9** | Cost | Parameter counting and approximate per-image wall-clock inference timing on the T4 |
+| **3** | Real-ESRGAN | `RealESRGAN_x4plus` checkpoint (RGB in → grayscale out) |
+| **4–5** | SwinIR, EDSR | `001_classicalSR_DIV2K_s48w8_SwinIR-M_x4` (window 8); `edsr-base` 4× DIV2K |
+| **5b** | ESRGAN control | `ESRGAN_SRx4_DF2KOST_official` on the four representative qualitative slices → `tables/table4_esrgan_control.csv` |
+| **6** | Quantitative evaluation | Head-mask PSNR/SSIM, full-frame PSNR/SSIM, LPIPS; Wilcoxon tests, bootstrap CIs; writes `per_image_metrics.csv`, `tables/table1`–`table3`, raw Figs. 2–3 |
+| **7, 7b** | Qualitative analysis | Zoomed insets, residual heat maps (\|SR − GT\|), inset MAE; raw Figs. 4–5 |
+| **8** | Downstream classification | ResNet-18 trained on 1600 HR / tested on 400 slices, five seeds (42–46); writes `tables/table5_6_downstream_5seed.json` |
+| **9** | Cost | Parameter counts and approximate per-image wall-clock inference timing on the T4 |
+| App. A | Preliminary single-split run | Kept for transparency; superseded by Step 8 and **not used in the paper** |
 
-### Dependencies (installed by the notebook)
+### Dependencies
 
-```
-torch==2.11  torchvision  pillow  numpy  scipy  scikit-image  pandas
-lpips  imagehash==4.3.2  opencv-python  matplotlib  timm  super-image
-basicsr  realesrgan  (Real-ESRGAN / ESRGAN)
-nunif   (Waifu2x UpConv-7)
-SwinIR  (official repo, cloned in-notebook)
-EDSR    (edsr-base weights, loaded in-notebook)
-```
-
-Public checkpoints are downloaded automatically from their official release pages. **No model is fine-tuned, and no post-processing or denoising is applied to any output.**
+See `requirements.txt`. The notebook installs them and clones the official model repositories (`nunif`, `Real-ESRGAN`, `SwinIR`, `ESRGAN`) in-session; `super-image` provides the EDSR weights. Public checkpoints are downloaded automatically from their official release pages. **No model is fine-tuned, and no post-processing or denoising is applied to any output.**
 
 ---
 
-## 📊 Key Results
+## Key results
 
 ### Table 1 — Overall results on 2000 slices (4×), mean ± SD
 
@@ -225,9 +236,9 @@ ESRGAN (same RRDB generator as Real-ESRGAN, but trained under a *matched* bicubi
 | Real-ESRGAN | 86.70 ± 2.86 | −6.55 | +2.75 ± 5.11 [0.30] | 30% |
 | **SwinIR** | **89.60 ± 2.27** | **−3.65** | **+5.65 ± 1.96 [0.003]** | **61%** |
 
-*(Note: The HR-versus-bicubic accuracy gap is +9.30 ± 3.78 pp, p = 0.005.)*
+*(The HR-versus-bicubic accuracy gap is +9.30 ± 3.78 pp, p = 0.005.)*
 
-Per-split accuracies (%):
+### Table 6 — Per-split classification accuracy (%)
 
 | Seed | HR | Bicubic | EDSR | Waifu2x | Real-ESRGAN | SwinIR |
 |---|---|---|---|---|---|---|
@@ -242,7 +253,7 @@ Per-split accuracies (%):
 - **Real-ESRGAN's gain is small and inconsistent** (below bicubic in seed 42; p = 0.30).
 - The downstream ordering tracks **head-mask PSNR/SSIM**, not LPIPS → fidelity to the reference, not perceptual sharpness, preserves class-discriminative information.
 
-### Table 6 — Model size and approximate inference cost (Tesla T4, 16 GB)
+### Table 7 — Model size and approximate inference cost (Tesla T4, 16 GB)
 
 | Method | Type | Parameters | Time / image (approx.) | Total (2000 images) |
 |---|---|---|---|---|
@@ -252,11 +263,11 @@ Per-split accuracies (%):
 | Real-ESRGAN (x4plus) | GAN | ≈ 16.7 M | ≈ 150 ms | ≈ 5 min |
 | SwinIR-M (classical) | Transformer | ≈ 11.9 M | ≈ 600 ms | ≈ 20 min |
 
-SwinIR's +0.21 dB over EDSR costs ~8× the parameters and ~10× the inference time. EDSR and Waifu2x deliver most of the attainable gain at a fraction of the cost.
+Timings are approximate wall-clock values noted during the benchmark runs, not programmatic per-image measurements. SwinIR's +0.21 dB over EDSR costs ~8× the parameters and ~10× the inference time. EDSR and Waifu2x deliver most of the attainable gain at a fraction of the cost.
 
 ---
 
-## 🔍 Main Findings at a Glance
+## Main findings at a glance
 
 | | Finding |
 |---|---|
@@ -267,20 +278,20 @@ SwinIR's +0.21 dB over EDSR costs ~8× the parameters and ~10× the inference ti
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 1. **Synthetic degradation.** LR inputs were produced by bicubic downsampling — the very degradation the distortion-oriented checkpoints were trained on. Real low-field / accelerated acquisitions lose resolution through k-space truncation, noise, and motion. Results describe transfer under an idealized degradation, not clinical performance, and the mismatch works against blind-SR models such as Real-ESRGAN.
 2. **Data.** 8-bit, JPEG-derived 2D slices from a public aggregate without acquisition metadata; heterogeneous sizes; the no-tumor class is systematically smaller; no 3D volumetric SR.
-3. **Duplicates.** 4.2% near-duplicates by exact pHash match (adjacent slices from the same volume would not be caught). Near-duplicate pairs do not bias the paired fidelity metrics; their exact effect on the five random downstream classification splits (~27 split-straddling pairs expected per random split) was bounded rather than directly re-measured.
+3. **Duplicates.** 4.2% near-duplicates by exact pHash match (adjacent slices from the same volume would not be caught). Near-duplicate pairs do not bias the paired fidelity metrics; their exact effect on the five random downstream classification splits (≈ 27 split-straddling pairs expected per random split) was bounded rather than directly re-measured.
 4. **No fine-tuning by design.** Domain-adapted MRI SR models would be expected to do better. Waifu2x was run as a 2×→2× cascade. The ESRGAN control covers four slices and inset MAE only.
-5. **Foreground head mask & full-frame LPIPS.** The intensity threshold mask retains skull and scalp alongside brain parenchyma (no skull-stripping was applied), and LPIPS was computed full-frame, making it less anatomy-specific than the masked distortion metrics.
+5. **Foreground head mask & full-frame LPIPS.** The intensity-threshold mask retains skull and scalp alongside brain parenchyma (no skull-stripping was applied), and LPIPS was computed full-frame, making it less anatomy-specific than the masked distortion metrics.
 6. **Downstream proxy.** ResNet-18 trained for 3 epochs on 1600 HR images only (introducing a potential train-versus-test domain shift when evaluated on SR outputs); considerable split-to-split variance; differences among the distortion-oriented models and vs Real-ESRGAN are only partly resolved with five splits.
 7. **No radiologist reader study** — no claim about diagnostic reading is made.
 8. **Single public collection** — limited scanner and protocol diversity.
 
 ---
 
-## 🔭 Future Work
+## Future work
 
 - Evaluate fine-tuned and MRI-specific SR models under the same protocol.
 - Extend the ESRGAN control to the full 2000-slice benchmark.
@@ -292,9 +303,9 @@ SwinIR's +0.21 dB over EDSR costs ~8× the parameters and ~10× the inference ti
 
 ---
 
-## 📝 Citation
+## Citation
 
-If you use this code, the manifest, or the benchmark results, please cite:
+If you use this code, the manifest, or the benchmark results, please cite (see also `CITATION.cff`):
 
 ```bibtex
 @unpublished{owais2026srbenchmark,
@@ -325,22 +336,22 @@ Please also cite the dataset and the original model papers:
 
 ---
 
-## 📜 Declarations
+## Declarations
 
 - **Funding:** This research received no external funding.
 - **Ethics:** Not applicable — only pre-existing, fully de-identified, publicly available imaging data were used; no new patient data were collected.
 - **Competing interests:** The authors declare no competing interests.
 - **Author contributions:** *Mohammad Owais (MoO)* — Conceptualization, Methodology, Software, Investigation, Data curation, Formal analysis, Visualization, Writing – original draft. *Muhammad Owais (MuO)* — Validation, Writing – review & editing.
-- **Generative AI use:** A large language model (Claude, Anthropic) was used for language editing and for reviewing the experimental pipeline for implementation errors. All text, code, analyses, and conclusions were reviewed, verified, and are the sole responsibility of the authors; the tool was not used to generate, analyze, or interpret data.
+- **Generative AI use:** A large language model (Claude, Anthropic) was used for language editing, for checking the internal consistency of reported numbers, and for reviewing the experimental pipeline for implementation errors. All text, code, analyses, and conclusions were reviewed, verified, and are the sole responsibility of the authors; the tool was not used to generate, analyze, or interpret data.
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 The authors thank the creators of the Brain Tumor MRI Dataset and the authors of the open-source SR implementations (EDSR, nunif/Waifu2x, Real-ESRGAN, ESRGAN, SwinIR, LPIPS, imagehash) for making their data and code publicly available.
 
-## 📄 License
+## License
 
-Code and evaluation scripts in this repository are released under the **MIT License** (see `LICENSE`). The Brain Tumor MRI Dataset and the pretrained model weights remain subject to their own respective original licenses — please consult the original sources before redistribution.
+Code, scripts, result tables, and figures in this repository are released under the **MIT License** (see `LICENSE`). There are no restrictions on use by non-academics. The Brain Tumor MRI Dataset and the pretrained model weights remain subject to their own respective original licenses — please consult the original sources before redistribution.
 
 ---
 
-&lt;p align=&quot;center&quot;&gt;&lt;sub&gt;Maintained by Mohammad Owais · Abbottabad University of Science and Technology · &lt;a href=&quot;mailto:owaiskhan2501000@gmail.com&quot;&gt;owaiskhan2501000@gmail.com&lt;/a&gt;&lt;/sub&gt;&lt;/p&gt;
+<p align="center"><sub>Maintained by Mohammad Owais · Abbottabad University of Science and Technology · <a href="mailto:owaiskhan2501000@gmail.com">owaiskhan2501000@gmail.com</a></sub></p>
