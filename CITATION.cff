@@ -6,9 +6,11 @@ authors:
   - family-names: Owais
     given-names: Mohammad
     email: owaiskhan2501000@gmail.com
+    orcid: "https://orcid.org/0009-0005-2319-3284"
     affiliation: "Department of Computer Science, Abbottabad University of Science and Technology, Abbottabad, Pakistan"
   - family-names: Owais
     given-names: Muhammad
+    email: owaiskhana635@gmail.com
     affiliation: "Faculty of Systems Design, Tokyo Metropolitan University, Tokyo, Japan"
 repository-code: "https://github.com/owaiskhan2501000/Brain-MRI-SR-Benchmark"
 license: MIT
