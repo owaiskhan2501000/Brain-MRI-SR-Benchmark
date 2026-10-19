@@ -25,7 +25,7 @@ for ax,(m,yl,pl) in zip(axs,spec):
     ax.spines[["top","right"]].set_visible(False)
     ax.text(-0.02,1.04,pl,transform=ax.transAxes,fontsize=17,fontweight="bold",va="bottom",ha="right" if False else "left")
 fig.tight_layout()
-fig.savefig(f"{out}/fig2_boxplots.png", dpi=300); plt.close(fig)
+fig.savefig(f"{out}/fig2_boxplots.png", dpi=300, bbox_inches="tight"); plt.close(fig)
 
 # ---- Fig 3
 fig, ax = plt.subplots(figsize=(8.36,4.6))
@@ -37,4 +37,4 @@ ax.set_xlabel("Head-mask PSNR (dB)", fontsize=16); ax.set_ylabel("Number of slic
 ax.grid(axis="y", ls=":", alpha=.6); ax.spines[["top","right"]].set_visible(False)
 ax.tick_params(labelsize=14)
 lg = ax.legend(title="Method", fontsize=14, title_fontsize=14, frameon=False, loc="upper right")
-fig.tight_layout(); fig.savefig(f"{out}/fig3_histogram.png", dpi=300); plt.close(fig)
+fig.tight_layout(); fig.savefig(f"{out}/fig3_histogram.png", dpi=300, bbox_inches="tight"); plt.close(fig)
